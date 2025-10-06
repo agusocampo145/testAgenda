@@ -1,0 +1,202 @@
+<div id="main">
+  <form #personaForm="ngForm" (ngSubmit)="agregarPersona()">
+    <h2>Agregar nuevo contacto:</h2>
+    <br />
+    <div class="form-row">
+      <input
+        name="nombre"
+        [(ngModel)]="nombreNuevaPersona"
+        required
+        minlength="2"
+        #nombre="ngModel"
+        placeholder="Nombre"
+      />
+      <input
+        name="apellido"
+        [(ngModel)]="apellidoNuevaPersona"
+        required
+        #apellido="ngModel"
+        placeholder="Apellido"
+      />
+      <input
+        name="telefono"
+        [(ngModel)]="telefonoNuevaPersona"
+        required
+        pattern="^[0-9]{7,15}$"
+        #telefono="ngModel"
+        placeholder="Teléfono"
+      />
+    </div>
+    <div class="mensaje-error" *ngIf="nombre.invalid && nombre.touched">
+      El nombre es obligatorio y debe tener al menos 2 caracteres.
+    </div>
+    <div class="mensaje-error" *ngIf="apellido.invalid && apellido.touched">
+      El apellido es obligatorio.
+    </div>
+    <div class="mensaje-error" *ngIf="telefono.invalid && telefono.touched">
+      El teléfono es obligatorio y debe ser numérico.
+    </div>
+
+    <div
+      *ngIf="!agregandoNuevaCiudad; else nuevaCiudadForm"
+      style="display: flex; align-items: center; gap: 10px"
+    >
+      <select
+        name="ciudad"
+        [(ngModel)]="ciudadNuevaPersona"
+        required
+        #ciudad="ngModel"
+      >
+        <option [ngValue]="null" disabled selected>
+          Seleccione una ciudad
+        </option>
+        <option *ngFor="let c of ciudades" [ngValue]="c">
+          {{ c.nombre }}, {{ c.provincia }} - {{ c.pais }}
+        </option>
+      </select>
+      <button type="button" (click)="mostrarFormularioNuevaCiudad()">
+        Nueva ciudad
+      </button>
+    </div>
+    <ng-template #nuevaCiudadForm>
+      <div
+        style="
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          margin-bottom: 10px;
+        "
+      >
+        <input
+          [(ngModel)]="nuevaCiudad.nombre"
+          name="nombreCiudad"
+          placeholder="Nombre de la ciudad"
+          required
+        />
+        <input
+          [(ngModel)]="nuevaCiudad.provincia"
+          name="provinciaCiudad"
+          placeholder="Provincia"
+          required
+        />
+        <input
+          [(ngModel)]="nuevaCiudad.pais"
+          name="paisCiudad"
+          placeholder="País"
+          required
+        />
+        <div style="display: flex; gap: 10px">
+          <button type="button" (click)="agregarCiudad()">
+            Agregar ciudad
+          </button>
+          <button type="button" (click)="cancelarNuevaCiudad()">Volver</button>
+        </div>
+      </div>
+    </ng-template>
+    <div *ngIf="!agregandoNuevaCiudad && ciudad?.invalid && ciudad?.touched">
+      La ciudad es obligatoria.
+    </div>
+
+    <button type="submit" [disabled]="personaForm.invalid">
+      Agregar Contacto
+    </button>
+  </form>
+
+  <div *ngIf="mensajeExito" class="dialog-success">
+    <span style="font-size: 2em">✅</span> {{ mensajeExito }}
+  </div>
+  <div
+    *ngIf="mensajeCiudadError"
+    class="dialog-error"
+    style="margin-bottom: 10px"
+  >
+    <span style="font-size: 1.5em">❌</span> {{ mensajeCiudadError }}
+  </div>
+
+  <!--
+  Podemos mostrar la tabla con TODOS los contactos solo porque 
+  en este caso de ejemplo tenemos poco registros.
+  En una aplicación real, lo ideal sería paginar los resultados
+  o implementar un sistema de búsqueda más avanzado.
+  -->
+  <div id="listaContactos">
+    <div id="buscadoresPorCampos">
+      <div id="buscadores">
+        <!-- Buscar por nombre -->
+        <div style="margin-bottom: 10px">
+          <input
+            type="text"
+            [(ngModel)]="busquedaNombre"
+            placeholder="Buscar por nombre"
+          />
+          <button (click)="buscarPorNombre()">Buscar por nombre</button>
+        </div>
+
+        <!-- Buscar por ciudad -->
+        <div style="margin-bottom: 10px">
+          <select [(ngModel)]="busquedaCiudad">
+            <option [ngValue]="null" disabled selected>
+              Seleccione una ciudad
+            </option>
+            <option *ngFor="let c of ciudades" [ngValue]="c">
+              {{ c.nombre }}, {{ c.provincia }}, {{ c.pais }}
+            </option>
+          </select>
+          <button (click)="buscarPorCiudad()">Buscar por ciudad</button>
+        </div>
+
+        <!-- Buscar por nombre en varias ciudades -->
+        <div style="margin-bottom: 10px">
+          <input
+            type="text"
+            [(ngModel)]="busquedaNombreMultiple"
+            placeholder="Nombre para búsqueda múltiple"
+          />
+          <div class="checklist-ciudades">
+            <label *ngFor="let c of ciudades" style="display: block">
+              <input
+                type="checkbox"
+                [value]="c.nombre"
+                (change)="onCiudadMultipleChange($event, c.nombre)"
+                [checked]="busquedaCiudadesMultiples.includes(c.nombre)"
+              />
+              {{ c.nombre }}, {{ c.provincia }}, {{ c.pais }}
+            </label>
+          </div>
+          <button (click)="buscarPorNombreYCiudades()">
+            Buscar por nombre y ciudades
+          </button>
+        </div>
+      </div>
+    </div>
+    <h2>Buscar contactos :</h2>
+    <input
+      type="text"
+      [(ngModel)]="filtroNombre"
+      placeholder="Filtrar por nombre"
+      (input)="filtrarPersonas()"
+    />
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Teléfono</th>
+          <th>Ciudad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let persona of personasFiltradas">
+          <td>{{ persona.nombre }}</td>
+          <td>{{ persona.apellido }}</td>
+          <td>{{ persona.telefono }}</td>
+          <td>
+            {{ persona.ciudad?.nombre }}, {{ persona.ciudad?.provincia }},
+            {{ persona.ciudad?.pais }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button (click)="limpiarFiltros()">Limpiar filtros</button>
+  </div>
+</div>

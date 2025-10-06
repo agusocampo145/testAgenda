@@ -1,0 +1,65 @@
+<div id="main">
+  <form (ngSubmit)="agregarCiudad()" #ciudadForm="ngForm">
+    <h2>Agregar nueva ciudad</h2>
+    <div class="form-row">
+      <input
+        name="nombre"
+        [(ngModel)]="nuevaCiudad.nombre"
+        required
+        minlength="2"
+        #nombre="ngModel"
+        placeholder="Nombre"
+      />
+      <input
+        name="provincia"
+        [(ngModel)]="nuevaCiudad.provincia"
+        required
+        #provincia="ngModel"
+        placeholder="Provincia"
+      />
+      <input
+        name="pais"
+        [(ngModel)]="nuevaCiudad.pais"
+        required
+        #pais="ngModel"
+        placeholder="País"
+      />
+    </div>
+    <div class="mensaje-error" *ngIf="nombre.invalid && nombre.touched">
+      El nombre es obligatorio y debe tener al menos 2 caracteres.
+    </div>
+    <div class="mensaje-error" *ngIf="provincia.invalid && provincia.touched">
+      La provincia es obligatoria.
+    </div>
+    <div class="mensaje-error" *ngIf="pais.invalid && pais.touched">
+      El país es obligatorio.
+    </div>
+    <div *ngIf="mensajeError" class="dialog-error">
+      <span style="font-size: 1.5em;">❌</span> {{ mensajeError }}
+    </div>
+    <div *ngIf="mensajeExito" class="dialog-success">
+      <span style="font-size: 1.5em;">✅</span> {{ mensajeExito }}
+    </div>
+    <button type="submit">Agregar ciudad</button>
+  </form>
+
+  <div id="listaContactos">
+    <h2>Ciudades registradas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Provincia</th>
+          <th>País</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of ciudades">
+          <td>{{ c.nombre }}</td>
+          <td>{{ c.provincia }}</td>
+          <td>{{ c.pais }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

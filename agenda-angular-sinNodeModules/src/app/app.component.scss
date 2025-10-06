@@ -1,0 +1,26 @@
+.navBar {
+  margin: 0.5rem;
+  padding: 0.5rem;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  background-color: #1976d2;
+  border: #1976d2;
+  border-radius: 0.4rem;
+  color: rgb(13, 24, 79);
+}
+
+.navBar a {
+  margin-left: 2rem;
+  margin-right: 2rem;
+  font-size: 1.2rem;
+  color: white;
+  text-decoration: none;
+  transition: font-size 0.2s, color 0.2s ease-in-out;
+}
+
+.navBar a:hover {
+  font-size: 1.3rem;
+  transition: font-size 0.2s, color 0.2s ease-in-out;
+  color: black;
+}

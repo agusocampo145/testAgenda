@@ -1,0 +1,206 @@
+<div id="main">
+  <form (ngSubmit)="agregarEmpresa()" #empresaForm="ngForm">
+    <h2>Agregar nueva empresa</h2>
+    <div class="form-row">
+      <input
+        name="nombre"
+        [(ngModel)]="nuevaEmpresa.razonSocial"
+        required
+        minlength="2"
+        #nombre="ngModel"
+        placeholder="Razón social"
+      />
+      <input
+        name="cuit"
+        [(ngModel)]="nuevaEmpresa.cuit"
+        required
+        [pattern]="'\\d{2}-\\d{8}-\\d'"
+        #cuit="ngModel"
+        placeholder="CUIT (NN-NNNNNNNN-N)"
+        (input)="formatearCuit($event)"
+        maxlength="12"
+      />
+    </div>
+    <div class="mensaje-error" *ngIf="nombre.invalid && nombre.touched">
+      El nombre es obligatorio y debe tener al menos 2 caracteres.
+    </div>
+    <div class="mensaje-error" *ngIf="cuit.invalid && cuit.touched">
+      El CUIT es obligatorio y debe tener formato NN-NNNNNNNN-N.
+    </div>
+    <div style="width: 100%; margin-bottom: 1rem">
+      <select
+        name="ciudad"
+        [(ngModel)]="nuevaEmpresa.ciudad"
+        required
+        #ciudad="ngModel"
+        style="width: 100%"
+      >
+        <option [ngValue]="null" disabled selected>
+          Seleccione ciudad sede principal
+        </option>
+        <option *ngFor="let c of ciudades" [ngValue]="c">
+          {{ c.nombre }}, {{ c.provincia }}, {{ c.pais }}
+        </option>
+      </select>
+    </div>
+    <div class="mensaje-error" *ngIf="ciudad.invalid && ciudad.touched">
+      Debe seleccionar una ciudad.
+    </div>
+    <div *ngIf="mensajeError" class="dialog-error">
+      <span style="font-size: 1.5em">❌</span> {{ mensajeError }}
+    </div>
+    <div *ngIf="mensajeExito" class="dialog-success">
+      <span style="font-size: 1.5em">✅</span> {{ mensajeExito }}
+    </div>
+    <button type="submit">Agregar empresa</button>
+  </form>
+
+  <div style="margin-bottom: 2rem; max-width: 40rem">
+    <label for="empresaSeleccionada" style="font-weight: 500"
+      >Buscar empresa:</label
+    >
+    <select
+      id="empresaSeleccionada"
+      [(ngModel)]="empresaSeleccionada"
+      (change)="mostrarEmpresaSeleccionada()"
+      style="min-width: 16rem; margin-left: 1rem"
+    >
+      <option [ngValue]="null" disabled selected>Seleccione una empresa</option>
+      <option *ngFor="let emp of empresas" [ngValue]="emp">
+        {{ emp.nombre }} ({{ emp.cuit }})
+      </option>
+    </select>
+    <button (click)="limpiarSeleccion()">Limpiar seleccion</button>
+  </div>
+
+  <!-- Tabla de la empresa seleccionada -->
+  <div
+    *ngIf="empresaSeleccionada"
+    id="empresaSeleccionadaTabla"
+    style="margin-bottom: 2.5rem"
+  >
+    <h2>Empresa seleccionada</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Razón social</th>
+          <th>CUIT</th>
+          <th>Ciudad sede</th>
+          <th>Contactos</th>
+          <th>Agregar contacto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ empresaSeleccionada.nombre }}</td>
+          <td>{{ empresaSeleccionada.cuit }}</td>
+          <td>
+            {{ empresaSeleccionada.ciudad?.nombre }},
+            {{ empresaSeleccionada.ciudad?.provincia }},
+            {{ empresaSeleccionada.ciudad?.pais }}
+          </td>
+          <td>
+            <ul>
+              <li *ngFor="let p of empresaSeleccionada.contactos">
+                {{ p.nombre }} {{ p.apellido }} ({{ p.telefono }})
+                <span *ngIf="p.apellido === 'Ocampo'">
+                  (Esperemos que si!) ;)
+                </span>
+              </li>
+            </ul>
+          </td>
+          <td>
+            <select
+              [(ngModel)]="nuevoContacto[empresaSeleccionada.id]"
+              style="min-width: 10rem"
+            >
+              <option [ngValue]="null" disabled selected>
+                Seleccionar contacto
+              </option>
+              <option *ngFor="let p of personas" [ngValue]="p">
+                {{ p.nombre }} {{ p.apellido }} ({{ p.telefono }})
+              </option>
+            </select>
+            <button
+              (click)="
+                agregarContactoAEmpresa(
+                  empresaSeleccionada.id,
+                  nuevoContacto[empresaSeleccionada.id]
+                )
+              "
+              style="margin-top: 0.5rem"
+            >
+              Añadir
+            </button>
+            <div
+              class="mensaje-error"
+              *ngIf="mensajeErrorContacto[empresaSeleccionada.id]"
+            >
+              {{ mensajeErrorContacto[empresaSeleccionada.id] }}
+            </div>
+            <div
+              class="dialog-success"
+              *ngIf="mensajeExitoContacto[empresaSeleccionada.id]"
+            >
+              {{ mensajeExitoContacto[empresaSeleccionada.id] }}
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="listaContactos" *ngIf="!empresaSeleccionada">
+    <h2>Empresas registradas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Razón social</th>
+          <th>CUIT</th>
+          <th>Ciudad sede</th>
+          <th>Contactos</th>
+          <th>Agregar contacto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of empresas">
+          <td>{{ e.nombre }}</td>
+          <td>{{ e.cuit }}</td>
+          <td>
+            {{ e.ciudad?.nombre }}, {{ e.ciudad?.provincia }},
+            {{ e.ciudad?.pais }}
+          </td>
+          <td>
+            <ul>
+              <li *ngFor="let p of e.contactos">
+                {{ p.nombre }} {{ p.apellido }} ({{ p.telefono }})
+              </li>
+            </ul>
+          </td>
+          <td>
+            <select [(ngModel)]="nuevoContacto[e.id]" style="min-width: 10rem">
+              <option [ngValue]="null" disabled selected>
+                Seleccionar contacto
+              </option>
+              <option *ngFor="let p of personas" [ngValue]="p">
+                {{ p.nombre }} {{ p.apellido }} ({{ p.telefono }})
+              </option>
+            </select>
+            <button
+              (click)="agregarContactoAEmpresa(e.id, nuevoContacto[e.id])"
+              style="margin-top: 0.5rem"
+            >
+              Añadir
+            </button>
+            <div class="mensaje-error" *ngIf="mensajeErrorContacto[e.id]">
+              {{ mensajeErrorContacto[e.id] }}
+            </div>
+            <div class="dialog-success" *ngIf="mensajeExitoContacto[e.id]">
+              {{ mensajeExitoContacto[e.id] }}
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
