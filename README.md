@@ -6,7 +6,7 @@ Este proyecto fue desarrollado como parte de una **entrevista técnica** para el
 
 El proyecto consiste en:
 
-- una **versión de consola** en Java,  
+- una **versión ejectuable en consola** en Java,  
 - una **API REST** en Spring Boot,  
 - y un **frontend** en Angular que consuma esa API.
 
