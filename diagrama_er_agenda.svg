@@ -1,0 +1,20 @@
+// Diagrama ER - Agenda
+digraph {
+	Persona [label="Persona
+--------------------
+id : Long
+nombre : String
+apellido : String
+ciudad : String
+email : String"]
+	Empresa [label="Empresa
+--------------------
+id : Long
+nombre : String
+rubro : String"]
+	Ciudad [label="Ciudad
+--------------------
+id : Long
+nombre : String"]
+	Empresa -> Persona [label="contactos (M:N)" arrowhead=none]
+}
