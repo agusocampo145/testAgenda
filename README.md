@@ -90,5 +90,5 @@ java Main
 Full Stack Developer | Angular · Spring Boot · Firebase  
 📍 Buenos Aires, Argentina  
 📧 [oca_a@outlook.com.ar](mailto:oca_a@outlook.com.ar)  
-🔗 [LinkedIn](https://www.linkedin.com/in/agustin-ocampo-5684b8182/)  
+🔗 [LinkedIn](https://www.linkedin.com/in/agust%C3%ADn-ocampo-5684b8182/)  
 🌐 [Portfolio](https://portfolio-zs.web.app)  
