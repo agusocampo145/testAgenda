@@ -26,7 +26,7 @@ Diseñar y construir una aplicación capaz de:
 |:--|:--|:--|
 | **Agenda Java (Consola)** | Versión inicial en memoria, con carga de datos manual y validaciones mediante excepciones personalizadas. | Java |
 | **Agenda Spring Boot (Backend)** | Implementación REST con persistencia en base de datos (JPA/Hibernate), manejo de excepciones global, DTOs y logger. | Spring Boot |
-| **Agenda Angular (Frontend)** | Interfaz web para gestión de personas, empresas y contactos. Permite listar, agregar, editar y buscar registros. | Angular 16 |
+| **Agenda Angular (Frontend)** | Interfaz web para gestión de personas, empresas y contactos. Permite listar, agregar, editar y buscar registros. | Angular |
 
 ---
 
