@@ -4,6 +4,8 @@ Este proyecto fue desarrollado como parte de una **entrevista técnica** para el
 
 ⭐ El siguiente proyecto fue desarrollado a lo largo de 3 días con el tiempo libre disponible entre trabajo y estudios.
 
+El proyecto consiste en:
+
 - una **versión de consola** en Java,  
 - una **API REST** en Spring Boot,  
 - y un **frontend** en Angular que consuma esa API.
