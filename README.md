@@ -39,17 +39,6 @@ Este proyecto fue desarrollado como parte de una **entrevista técnica** para el
 
 ---
 
-## 🧮 Diagrama Entidad-Relación (ER)
-
-```
-Persona (id, nombre, ciudad)
-Empresa (id, nombre)
-Contacto (empresa_id, persona_id)
-Ciudad (id, nombre)
-```
-
----
-
 ## 🧰 Tecnologías utilizadas
 
 ### 🔹 Backend
@@ -65,8 +54,6 @@ Ciudad (id, nombre)
 - Angular 19.2.13  
 - TypeScript 5.7.2  
 - RxJS 7.8  
-- Bootstrap (SCSS personalizado)  
-- Express 4.18.2 (SSR opcional)  
 
 ### 🔹 General
 - Git & GitHub  
@@ -92,15 +79,6 @@ cd agenda-java
 javac Main.java
 java Main
 ```
-
----
-
-## 💡 Resultado
-
-El proyecto demuestra:
-- Capacidad para diseñar y entregar soluciones funcionales bajo presión de tiempo.  
-- Dominio del stack Java/Angular en un entorno full-stack moderno.  
-- Enfoque en la arquitectura limpia y buenas prácticas, incluso en contextos de prototipado rápido.
 
 ---
 
